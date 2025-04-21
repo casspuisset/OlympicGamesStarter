@@ -1,8 +1,17 @@
-<h2>Olympic games app</h2>
-<hr />
-<p>{{ (olympics$ | async)?.length }} data loaded</p>
+<h2>Medals per Country</h2>
+<section class="countSection">
+  <div class="countCategory">
+    <p>Number of JOs</p>
+    <p>{{ (olympics$ | async)[0]["participations"]?.length }}</p>
+  </div>
+  <div class="countCategory">
+    <p>Number of countries</p>
+    <p>{{ (olympics$ | async)?.length }}</p>
+  </div>
+</section>
+
 <ngx-charts-pie-chart
-  [results]="single"
+  [results]="pieChartData"
   [gradient]="gradient"
   [labels]="showLabels"
   [doughnut]="isDoughnut"

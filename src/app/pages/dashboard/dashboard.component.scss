@@ -1,3 +1,14 @@
+h2 {
+  display: flex;
+  justify-content: center;
+}
+
+.countSection {
+  display: flex;
+  justify-content: center;
+  gap: 10em;
+}
+
 ngx-charts-pie-chart {
   display: flex;
   aspect-ratio: 3/2;

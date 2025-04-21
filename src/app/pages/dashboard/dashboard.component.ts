@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { map, Observable, of, pipe } from 'rxjs';
+import { Observable, of, take } from 'rxjs';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 import { OlympicCountry } from 'src/app/core/models/Olympic';
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { NgFor } from '@angular/common';
-import { LegendPosition, NgxChartsModule } from '@swimlane/ngx-charts';
-import { single } from 'src/assets/mock/data';
-import * as d3 from 'd3';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { __values } from 'tslib';
+import { OlympicParticipation } from 'src/app/core/models/Participation';
 // import {}
 
 @Component({
@@ -19,12 +18,10 @@ import * as d3 from 'd3';
 export class DashboardComponent implements OnInit {
   public olympics$: Observable<any> = of(null);
   public pieChartData: { name: string; value: number }[] = [];
-  // public pieChartData: { name: string; value: number }[] = [];
 
   /**
    * Initialisation de la pie-chart sans les valeurs de l'observable
    */
-  single!: any[];
   gradient: boolean = true;
   showLegend: boolean = true;
   showLabels: boolean = true;
@@ -33,14 +30,32 @@ export class DashboardComponent implements OnInit {
     domain: ['#5AA454', '#A3333', '#C7B42C', '#AAAAAA'],
   };
 
-  constructor(private olympicService: OlympicService) {
-    Object.assign(this, { single });
-  }
+  constructor(private olympicService: OlympicService) {}
 
   ngOnInit(): void {
     this.olympics$ = this.olympicService.getOlympics();
+    this.olympics$.pipe(take(2)).subscribe((value) => {
+      this.createAnArray(value);
+    });
+  }
 
-    console.log(this.olympics$);
+  createAnArray(oldarray: any) {
+    oldarray.forEach((olympicCountry: OlympicCountry) => {
+      let thisCount = this.medalsCount(olympicCountry.participations);
+      let objectToPush = {
+        name: olympicCountry.country,
+        value: thisCount,
+      };
+      this.pieChartData.push(objectToPush);
+    });
+  }
+
+  medalsCount(array: Array<OlympicParticipation>) {
+    let totalCount: number = 0;
+    array.forEach((participation: OlympicParticipation) => {
+      totalCount = totalCount + participation.medalsCount;
+    });
+    return totalCount;
   }
 
   onSelect(data: any): void {
