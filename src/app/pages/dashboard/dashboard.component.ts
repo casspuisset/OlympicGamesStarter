@@ -5,7 +5,7 @@ import { OlympicCountry } from 'src/app/core/models/Olympic';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { __values } from 'tslib';
-import { OlympicParticipation } from 'src/app/core/models/Participation';
+import { medalsCountService } from 'src/app/core/services/medals.service';
 // import {}
 
 @Component({
@@ -30,7 +30,10 @@ export class DashboardComponent implements OnInit {
     domain: ['#5AA454', '#A3333', '#C7B42C', '#AAAAAA'],
   };
 
-  constructor(private olympicService: OlympicService) {}
+  constructor(
+    private olympicService: OlympicService,
+    private medalsCount: medalsCountService
+  ) {}
 
   ngOnInit(): void {
     this.olympics$ = this.olympicService.getOlympics();
@@ -41,21 +44,15 @@ export class DashboardComponent implements OnInit {
 
   createAnArray(oldarray: any) {
     oldarray.forEach((olympicCountry: OlympicCountry) => {
-      let thisCount = this.medalsCount(olympicCountry.participations);
+      let thisCount = this.medalsCount.medalsCount(
+        olympicCountry.participations
+      );
       let objectToPush = {
         name: olympicCountry.country,
         value: thisCount,
       };
       this.pieChartData.push(objectToPush);
     });
-  }
-
-  medalsCount(array: Array<OlympicParticipation>) {
-    let totalCount: number = 0;
-    array.forEach((participation: OlympicParticipation) => {
-      totalCount = totalCount + participation.medalsCount;
-    });
-    return totalCount;
   }
 
   onSelect(data: any): void {

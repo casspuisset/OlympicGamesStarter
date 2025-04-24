@@ -2,11 +2,11 @@
 <section class="countSection">
   <div class="countCategory">
     <p>Number of JOs</p>
-    <p>{{ (olympics$ | async)[0]["participations"]?.length }}</p>
+    <span>{{ (olympics$ | async)[0]["participations"]?.length }}</span>
   </div>
   <div class="countCategory">
     <p>Number of countries</p>
-    <p>{{ (olympics$ | async)?.length }}</p>
+    <span>{{ (olympics$ | async)?.length }}</span>
   </div>
 </section>
 
