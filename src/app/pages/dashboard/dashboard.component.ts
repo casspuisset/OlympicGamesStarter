@@ -6,6 +6,7 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { __values } from 'tslib';
 import { medalsCountService } from 'src/app/core/services/medals.service';
+import { Router } from '@angular/router';
 // import {}
 
 @Component({
@@ -32,7 +33,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private olympicService: OlympicService,
-    private medalsCount: medalsCountService
+    private medalsCount: medalsCountService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -57,13 +59,14 @@ export class DashboardComponent implements OnInit {
 
   onSelect(data: any): void {
     console.log('Item clicked', JSON.parse(JSON.stringify(data)));
+    this.router.navigateByUrl(`${data.name}`);
   }
 
-  onActivate(data: any): void {
-    console.log('Activate', JSON.parse(JSON.stringify(data)));
-  }
+  // onActivate(data: any): void {
+  //   console.log('Activate', JSON.parse(JSON.stringify(data)));
+  // }
 
-  onDeactivate(data: any): void {
-    console.log('Deactivate', JSON.parse(JSON.stringify(data)));
-  }
+  // onDeactivate(data: any): void {
+  //   console.log('Deactivate', JSON.parse(JSON.stringify(data)));
+  // }
 }
