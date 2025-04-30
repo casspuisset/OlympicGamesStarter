@@ -45,28 +45,24 @@ export class DashboardComponent implements OnInit {
   }
 
   createAnArray(oldarray: any) {
-    oldarray.forEach((olympicCountry: OlympicCountry) => {
-      let thisCount = this.medalsCount.medalsCount(
-        olympicCountry.participations
-      );
-      let objectToPush = {
-        name: olympicCountry.country,
-        value: thisCount,
-      };
-      this.pieChartData.push(objectToPush);
-    });
+    if (oldarray) {
+      let thisOlympicCountry: any[] = [];
+      oldarray.forEach((olympicCountry: OlympicCountry) => {
+        let thisCount = this.medalsCount.medalsCount(
+          olympicCountry.participations
+        );
+        let resume = {
+          name: olympicCountry.country,
+          value: thisCount,
+        };
+        thisOlympicCountry.push(resume);
+      });
+      this.pieChartData = thisOlympicCountry;
+    }
   }
 
   onSelect(data: any): void {
     console.log('Item clicked', JSON.parse(JSON.stringify(data)));
     this.router.navigateByUrl(`${data.name}`);
   }
-
-  // onActivate(data: any): void {
-  //   console.log('Activate', JSON.parse(JSON.stringify(data)));
-  // }
-
-  // onDeactivate(data: any): void {
-  //   console.log('Deactivate', JSON.parse(JSON.stringify(data)));
-  // }
 }

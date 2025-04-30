@@ -5,12 +5,12 @@ import { DetailsComponent } from './pages/details/details.component';
 
 export const routes: Routes = [
   {
-    path: '',
-    component: DashboardComponent,
-  },
-  {
     path: ':countryName', //path for each country
     component: DetailsComponent,
+  },
+  {
+    path: '',
+    component: DashboardComponent,
   },
   {
     path: '**', // wildcard

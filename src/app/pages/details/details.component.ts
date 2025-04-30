@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Observable, of, take } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 import { OlympicCountry } from 'src/app/core/models/Olympic';
 import { medalsCountService } from 'src/app/core/services/medals.service';
@@ -53,35 +53,40 @@ export class DetailsComponent implements OnInit {
     this.countryPath = this.route.snapshot.params['countryName'];
     this.olympics$ = this.olympicService.getOlympics();
     console.log(this.olympics$);
-    this.olympics$.pipe(take(1)).subscribe((value) => {
+    this.olympics$.subscribe((value) => {
       this.createCountryArray(value);
     });
   }
 
   createCountryArray(oldarray: any) {
-    oldarray.forEach((olympicCountry: OlympicCountry) => {
-      if (olympicCountry.country === this.countryPath) {
+    if (oldarray) {
+      let thisCountry: OlympicCountry = oldarray.find(
+        (country: any) => country.country == this.countryPath
+      );
+
+      if (thisCountry.country === this.countryPath) {
+        let medalsTimeline: any[] = [];
+
         this.countryMedals = this.medalsCount.medalsCount(
-          olympicCountry.participations
+          thisCountry.participations
         );
-        this.JOsNumber = olympicCountry.participations.length;
-        this.countryAthletes = this.athletesCount(
-          olympicCountry.participations
-        );
-        olympicCountry.participations.forEach((edition) => {
+        this.JOsNumber = thisCountry.participations.length;
+        this.countryAthletes = this.athletesCount(thisCountry.participations);
+        thisCountry.participations.forEach((edition) => {
           let editionToPush = {
             name: edition.year.toString(),
             value: edition.medalsCount,
           };
           this.medalsByEdition.push(editionToPush);
         });
-        let objectToPush = {
-          name: olympicCountry.country,
+        let medalFromYear = {
+          name: thisCountry.country,
           series: this.medalsByEdition,
         };
-        this.lineChartData.push(objectToPush);
+        medalsTimeline.push(medalFromYear);
+        this.lineChartData = medalsTimeline;
       }
-    });
+    }
   }
 
   athletesCount(array: Array<OlympicParticipation>) {
