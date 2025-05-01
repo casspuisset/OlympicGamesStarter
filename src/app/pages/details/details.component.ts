@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 import { OlympicCountry } from 'src/app/core/models/Olympic';
@@ -41,7 +41,8 @@ export class DetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private medalsCount: medalsCountService,
-    private olympicService: OlympicService
+    private olympicService: OlympicService,
+    private router: Router
   ) {
     this.countryMedals = 0;
     this.JOsNumber = 0;
@@ -64,7 +65,10 @@ export class DetailsComponent implements OnInit {
         (country: any) => country.country == this.countryPath
       );
 
-      if (thisCountry.country === this.countryPath) {
+      if (
+        thisCountry !== undefined &&
+        thisCountry.country === this.countryPath
+      ) {
         let medalsTimeline: any[] = [];
 
         this.countryMedals = this.medalsCount.medalsCount(
@@ -85,6 +89,8 @@ export class DetailsComponent implements OnInit {
         };
         medalsTimeline.push(medalFromYear);
         this.lineChartData = medalsTimeline;
+      } else {
+        this.router.navigateByUrl(`${this.countryPath}/error`);
       }
     }
   }
