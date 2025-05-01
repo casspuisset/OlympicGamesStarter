@@ -1,0 +1,21 @@
+<h1 class="box">Medals per Country</h1>
+<section class="countSection">
+  <div class="countCategory">
+    <p>Number of JOs</p>
+    <span>{{ (olympics$ | async)[0]["participations"]?.length }}</span>
+  </div>
+  <div class="countCategory">
+    <p>Number of countries</p>
+    <span>{{ (olympics$ | async)?.length }}</span>
+  </div>
+</section>
+
+<ngx-charts-pie-chart
+  [results]="pieChartData"
+  [gradient]="gradient"
+  [labels]="showLabels"
+  [doughnut]="isDoughnut"
+  [customColors]="colorScheme"
+  (select)="onSelect($event)"
+>
+</ngx-charts-pie-chart>

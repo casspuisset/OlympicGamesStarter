@@ -1,0 +1,22 @@
+ngx-charts-pie-chart {
+  display: flex;
+  aspect-ratio: 3/2;
+  max-height: 50vh;
+  width: 100%;
+}
+
+.pie-label {
+  opacity: 0.6;
+}
+
+@media (orientation: landscape) {
+  .pie-label {
+    font-size: 2vw;
+  }
+}
+
+@media (orientation: portrait) {
+  .pie-label {
+    font-size: 2vh;
+  }
+}
