@@ -1,0 +1,28 @@
+<div class="header">
+  <h1 class="box">{{ countryPath }}</h1>
+  <a routerLink="" class="box">Back</a>
+</div>
+<section class="countSection">
+  <div class="countCategory">
+    <p>Number of JOs</p>
+    <span>{{ JOsNumber }}</span>
+  </div>
+  <div class="countCategory">
+    <p>Total number of medals</p>
+    <span>{{ countryMedals }}</span>
+  </div>
+  <div class="countCategory">
+    <p>Total number of athletes</p>
+    <span>{{ countryAthletes }}</span>
+  </div>
+</section>
+
+<ngx-charts-line-chart
+  [showXAxisLabel]="showXAxisLabel"
+  [showYAxisLabel]="showYAxisLabel"
+  [xAxis]="xAxis"
+  [yAxis]="yAxis"
+  [xAxisLabel]="xAxisLabel"
+  [results]="lineChartData"
+>
+</ngx-charts-line-chart>
