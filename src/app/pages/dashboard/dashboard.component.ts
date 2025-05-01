@@ -62,7 +62,6 @@ export class DashboardComponent implements OnInit {
   }
 
   onSelect(data: any): void {
-    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
     this.router.navigateByUrl(`${data.name}`);
   }
 }

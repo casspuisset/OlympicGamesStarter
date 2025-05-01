@@ -1,14 +1,7 @@
-a {
-  position: absolute;
-  text-decoration: none;
-  top: 10px;
-  right: 10px;
-}
-
 ngx-charts-line-chart {
   display: flex;
   aspect-ratio: 8/3;
-  max-height: 90vh;
+  max-height: 50vh;
   width: 100%;
 }
 
@@ -16,4 +9,12 @@ ngx-charts-line-chart {
 }
 
 @media (orientation: portrait) {
+}
+
+@media (max-width: 767px) {
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 2em;
+  }
 }

@@ -1,11 +1,14 @@
-<h2>{{ countryPath }}</h2>
+<div class="header">
+  <h1 class="box">{{ countryPath }}</h1>
+  <a routerLink="" class="box">Back</a>
+</div>
 <section class="countSection">
   <div class="countCategory">
     <p>Number of JOs</p>
     <span>{{ JOsNumber }}</span>
   </div>
   <div class="countCategory">
-    <p>Total number medals</p>
+    <p>Total number of medals</p>
     <span>{{ countryMedals }}</span>
   </div>
   <div class="countCategory">
@@ -23,5 +26,3 @@
   [results]="lineChartData"
 >
 </ngx-charts-line-chart>
-
-<a routerLink="">Retour</a>
