@@ -1,6 +1,6 @@
 # OlympicGamesStarter
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.3.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 19.2.8.
 
 Don't forget to install your node_modules before starting (`npm install`).
 
@@ -12,22 +12,23 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The appli
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-## Where to start
+## Organisation
 
-As you can see, an architecture has already been defined for the project. It is just a suggestion, you can choose to use your own. The predefined architecture includes (in addition to the default angular architecture) the following:
+The architecture of this app is defined as :
 
-- `components` folder: contains every reusable components
-- `pages` folder: contains components used for routing
-- `core` folder: contains the business logic (`services` and `models` folders)
+- `pages` folder: contains components for each routes : Dashboard (the landing and main page), Details (reusable component for each country) and NotFound (for redirection in case of inexisting url or path);
+- `core` folder: contains the business logic (`services` and `models` folders).
 
-I suggest you to start by understanding this starter code. Pay an extra attention to the `app-routing.module.ts` and the `olympic.service.ts`.
-
-Once mastered, you should continue by creating the typescript interfaces inside the `models` folder. As you can see I already created two files corresponding to the data included inside the `olympic.json`. With your interfaces, improve the code by replacing every `any` by the corresponding interface.
-
-You're now ready to implement the requested features.
-
-Good luck!
+The datas are, for now, provided by `olympic.json` file in an `assets` folder and restituted as Observables.
 
 ## Library
 
-This app use ngx-charts as a library. Please install it with `npm install @swimlane/ngx-charts --save`
+This app use ngx-charts as a library. Please install it with `npm install @swimlane/ngx-charts --save`. Make sure to run this app with the lastest version of angular/cli to prevent any error of compatibily.
+
+## Presentation
+
+OlympicGamesStarter is an application that creates visual reprentation and graphics of datas about different countries during previous Olympic Games. The Dashboard contains global datas such as how many countries and games are represented and the relative quantity of medals for each country.
+
+The app provides a page for each country as well, with the number of medals gained at each edition or the quantity of athletes from this country.
+
+In case of error (such as the search of an unregistered country with the url), the router redirects the user to an error page where they can regain the dashboard.
