@@ -7,7 +7,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { __values } from 'tslib';
 import { medalsCountService } from 'src/app/core/services/medals.service';
 import { Router } from '@angular/router';
-// import {}
+import { KeysValue } from 'src/app/core/models/KeysValue';
 
 @Component({
   selector: 'app-home',
@@ -17,11 +17,11 @@ import { Router } from '@angular/router';
   standalone: true,
 })
 export class DashboardComponent implements OnInit {
-  public olympics$: Observable<any> = of(null);
-  public pieChartData: { name: string; value: number }[] = [];
+  public olympics$: Observable<Array<OlympicCountry>> = of([]);
+  public pieChartData: KeysValue[] = [];
 
   /**
-   * Initialisation de la pie-chart sans les valeurs de l'observable
+   * Initialisation of the pie-chart
    */
   gradient: boolean = true;
   showLegend: boolean = true;
@@ -30,6 +30,7 @@ export class DashboardComponent implements OnInit {
   colorScheme = {
     domain: ['#5AA454', '#A3333', '#C7B42C', '#AAAAAA'],
   };
+  JOsNumber: number = 0;
 
   constructor(
     private olympicService: OlympicService,
@@ -44,14 +45,19 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  createAnArray(oldarray: any) {
+/**
+ * Extract data from olympics$ for pie-chart and counters
+ * @param oldarray data from olympics$ 
+ */
+  createAnArray(oldarray: OlympicCountry[]) {
     if (oldarray) {
-      let thisOlympicCountry: any[] = [];
+      let thisOlympicCountry: KeysValue[] = [];
       oldarray.forEach((olympicCountry: OlympicCountry) => {
         let thisCount = this.medalsCount.medalsCount(
           olympicCountry.participations
         );
-        let resume = {
+        this.JOsNumber = olympicCountry.participations.length;
+        let resume: KeysValue = {
           name: olympicCountry.country,
           value: thisCount,
         };
@@ -61,7 +67,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  onSelect(data: any): void {
-    this.router.navigateByUrl(`${data.name}`);
+  onSelect(data: {name: string, value: number, label: string}): void {
+    this.router.navigateByUrl(`details/${data.name}`);
   }
 }

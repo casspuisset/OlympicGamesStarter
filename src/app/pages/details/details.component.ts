@@ -6,10 +6,9 @@ import { OlympicCountry } from 'src/app/core/models/Olympic';
 import { medalsCountService } from 'src/app/core/services/medals.service';
 import { OlympicParticipation } from 'src/app/core/models/Participation';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { animation } from '@angular/animations';
+import { KeysValue } from 'src/app/core/models/KeysValue';
 
 @Component({
-  // animations: [provideAnimationsAsync(), provideAnimations()],
   selector: 'app-details',
   imports: [RouterLink, NgxChartsModule],
   templateUrl: './details.component.html',
@@ -17,17 +16,28 @@ import { animation } from '@angular/animations';
   standalone: true,
 })
 export class DetailsComponent implements OnInit {
-  public olympics$: Observable<any> = of(null);
+  //Observable with data
+  public olympics$: Observable<Array<OlympicCountry>> = of([]);
+  //Array to irrigate the lineChart
   public lineChartData: {
     name: string;
-    series: Array<{ name: string; value: number }>;
+    series: KeysValue[];
   }[] = [];
-  medalsByEdition: any[] = [];
+  //Array with medals number for each editions
+  medalsByEdition: KeysValue[] = [];
+  //Array with medals number for each editions with dates
+  medalsTimeline: Array<{
+    name: string;
+    series: KeysValue[];
+  }> = [];
+  //Total of medals for this country
   countryMedals: number;
+  //Total of JOs
   JOsNumber: number;
+  //Total of athletes
   countryAthletes: number;
 
-  // options
+  // options for line-chart
   legend: boolean = true;
   showLabels: boolean = true;
   xAxis: boolean = true;
@@ -53,31 +63,38 @@ export class DetailsComponent implements OnInit {
   ngOnInit(): void {
     this.countryPath = this.route.snapshot.params['countryName'];
     this.olympics$ = this.olympicService.getOlympics();
-    console.log(this.olympics$);
     this.olympics$.subscribe((value) => {
       this.createCountryArray(value);
     });
   }
 
-  createCountryArray(oldarray: any) {
+  /**
+   * Extract data for the country that matches the url by searching its name 
+   * @param oldarray values from olympics$ with all countries data
+   */
+  createCountryArray(oldarray: OlympicCountry[]) {
     if (oldarray) {
-      let thisCountry: OlympicCountry = oldarray.find(
-        (country: any) => country.country == this.countryPath
+      //check if url matches a country's name in olympics$ data
+      let thisCountry: OlympicCountry | undefined = oldarray.find(
+        (country: OlympicCountry) => country.country == this.countryPath
       );
 
       if (
         thisCountry !== undefined &&
         thisCountry.country === this.countryPath
       ) {
-        let medalsTimeline: any[] = [];
-
+        //Total number of medals
         this.countryMedals = this.medalsCount.medalsCount(
           thisCountry.participations
         );
+        //Total number of JOs
         this.JOsNumber = thisCountry.participations.length;
+        //Total number of athletes
         this.countryAthletes = this.athletesCount(thisCountry.participations);
+
+        //data for line-chart
         thisCountry.participations.forEach((edition) => {
-          let editionToPush = {
+          let editionToPush: KeysValue = {
             name: edition.year.toString(),
             value: edition.medalsCount,
           };
@@ -87,14 +104,20 @@ export class DetailsComponent implements OnInit {
           name: thisCountry.country,
           series: this.medalsByEdition,
         };
-        medalsTimeline.push(medalFromYear);
-        this.lineChartData = medalsTimeline;
+        this.medalsTimeline.push(medalFromYear);
+        this.lineChartData = this.medalsTimeline;
       } else {
+        //if url doesn't match a country's name in olympics$ data, redirect to error page
         this.router.navigateByUrl(`${this.countryPath}/error`);
       }
     }
   }
 
+  /**
+   * Return number of athletes from the component's country with all editions
+   * @param array data for this country
+   * @returns number of athletes
+   */
   athletesCount(array: Array<OlympicParticipation>) {
     let totalCount: number = 0;
     array.forEach((participation: OlympicParticipation) => {
